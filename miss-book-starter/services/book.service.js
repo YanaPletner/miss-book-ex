@@ -3,8 +3,8 @@ import { storageService } from './async-storage.service.js'
 
 const booksDemo = [
     {
-        id: utilService.makeId(),
-        title: "Book 1",
+        id: 1,
+        title: "Gwent",
         listPrice: {
             amount: 20,
             currencyCode: "USD",
@@ -12,8 +12,8 @@ const booksDemo = [
         }
     },
     {
-        id: utilService.makeId(),
-        title: "Book 2",
+        id: 2,
+        title: "Between Here And Gone",
         listPrice: {
             amount: 15,
             currencyCode: "USD",
@@ -21,8 +21,8 @@ const booksDemo = [
         }
     },
     {
-        id: utilService.makeId(),
-        title: "Book 3",
+        id: 3,
+        title: "Magic Lantern",
         listPrice: {
             amount: 30,
             currencyCode: "USD",
