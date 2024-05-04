@@ -2,6 +2,7 @@ const { useState, useEffect } = React
 
 import { bookService } from "../services/book.service.js"
 import { BookFilter } from "../cmps/BookFilter.jsx"
+import {BookList} from "../cmps/BookList.jsx"
 
 export function BookIndex(){
     const [ books, setBooks ] = useState(bookService.getAllBooks)
@@ -11,6 +12,18 @@ export function BookIndex(){
         bookService.query(filterBy)
             .then(books => setBooks(books))
     }, [filterBy])
+
+    function onRemoveBook(bookId) {
+        bookService.remove(bookId)
+            .then(() => {
+                setBooks(prevBooks => prevBooks.filter(book => book.id !== bookId))
+                // showSuccessMsg(`Book removed`)
+            })
+            .catch(err => {
+                console.log('err:', err)
+                // showErrorMsg('Cannot remove book ' + bookId)
+            })
+    }
 
     
     function onSetFilterBy(newFilter) {
@@ -22,19 +35,8 @@ export function BookIndex(){
     return (
         <section>
             <BookFilter filterBy={filterBy} onFilter={onSetFilterBy}/>
-            <ul>
-                {books.map(book=>
-                    <li key={book.id}>
-                        <article key={book.id}>
-                            <span className="close-btn">X</span>
-                            <br></br>
-                            <span>{book.title}</span>
-                            <span>{`${book.listPrice.amount} ${book.listPrice.currencyCode}`}</span>
-                        </article>
-                        <hr></hr>
-                    </li>
-                )}
-            </ul>
+            <h2>Books List</h2>
+            <BookList books={books} onRemoveBook={onRemoveBook} />
         </section>
     )
 }
