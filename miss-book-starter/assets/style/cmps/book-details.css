@@ -1,0 +1,24 @@
+* {
+    box-sizing: border-box;
+}
+
+.sale {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color: rgb(218, 74, 34);
+    rotate: -10deg;
+    margin-block-end: 1em;
+    text-align: center;
+}
+
+.sale:hover {
+    scale: 1.5;
+    transition: 0.5s;
+}
+
+.price.red {
+    color: rgb(199, 59, 59);
+}
+
+.price.green {
+    color: rgb(43, 118, 20);
+}

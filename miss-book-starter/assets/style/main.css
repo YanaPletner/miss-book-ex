@@ -8,3 +8,4 @@
 @import "base/layout.css";
 
 /* Components */
+@import "cmps/book-details.css";
