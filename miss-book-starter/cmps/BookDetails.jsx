@@ -1,42 +1,98 @@
-export function BookDetails({ book, onClose }) {
+const { useState, useEffect } = React
+const { useParams, useNavigate } = ReactRouterDOM
+
+import { bookService } from "../services/book.service.js"
+import { Loader } from "../cmps/Loader.jsx"
+
+// export function BookDetails({book ,onClose }) {
+export function BookDetails() {
+    const [book, setBook] = useState(null)
+
+    const {bookId} = useParams()
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        loadBook()
+    }, [bookId])
+
+    function loadBook() {
+        bookService.getBookById(bookId).then((book) => setBook(book))
+    }
+
+    if (!book) return <Loader />
+
+    const {
+        thumbnail,
+        title,
+        subtitle,
+        pageCount,
+        publishedDate,
+        description,
+        authors,
+        categories,
+        language,
+        // reviews,
+    } = book
+
+
+    const { currencyCode, amount, isOnSale } = book.listPrice
 
     function pageCountTxt(){
-        if(book.pageCount>500) return 'Serious Reading'
-        else if( book.pageCount > 200) return 'Descent Reading'
+        if(book){
+        if(pageCount>500) return 'Serious Reading'
+        else if(pageCount> 200) return 'Descent Reading'
         else return 'Light Reading'
+        }
     }
 
     function publishedDateTxt(){
+        if(book){
         const currYear= new Date().getFullYear()
-        const yearsPast = currYear - book.publishedDate
+        const yearsPast = currYear - publishedDate
         if(yearsPast>10) return 'Vintage'
         else if(yearsPast===1) return 'New'
+        }
     }
 
     function onSaleSign(){
-        if(book.listPrice.isOnSale) return 'ON SALE'
+        if(book){
+        if(isOnSale) return 'ON SALE'
+        else return 'OnSale'
+        }
+    }
+
+    function goBack(){
+        navigate('/book')
+    }
+
+    function capitalize(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1)
     }
 
     return <section className="book-details">
         <hr></hr>
-        <button onClick={onClose}>x</button>
+        <button onClick={goBack} className="close-btn">x</button>
         <h2 className="sale">{onSaleSign()}</h2>
-        <h3>{book.title}</h3>  
-        <h4>{book.subtitle}</h4> 
-        <p>{book.categories}</p>
-        <p>{book.authors}</p>  
 
-        <p className={`price ${book.listPrice.amount > 150 ? 'red' : ''} ${book.listPrice.amount < 20 ? 'green' : ''}`}>{`${book.listPrice.amount} ${book.listPrice.currencyCode}`} </p> 
-        <p>{ `Language: ${book.language}`}</p>       
-        <img src={`./BooksImages/${book.id}.jpg`} alt="" />
+        <h3>{capitalize(title)}</h3>  
+        <h4>{capitalize(subtitle)}</h4> 
 
-        <span>{`Published: ${book.publishedDate}, `}</span>
+        <img src={thumbnail} alt="" />
+
+        <p>{categories}</p>
+        <p>{authors}</p>  
+
+        <p className={`price ${amount > 150 ? 'red' : ''} ${amount < 20 ? 'green' : ''}`}>{`${amount} ${currencyCode}`} </p> 
+        <p>{ `Language: ${language}`}</p>       
+
+        <span>{`Published: ${publishedDate}, `}</span>
         <span>{publishedDateTxt()}</span>
 
-        <p>{book.description}</p>
+        <p>{description}</p>
 
-        <span>{`Pages: ${book.pageCount}, `}</span>
-        <span>{pageCountTxt()}</span>
+        <span>{`Pages: ${pageCount}, `}</span>
+        <span>{pageCountTxt()}</span> 
+
         <hr></hr>
     </section>
 }

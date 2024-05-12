@@ -1,47 +1,67 @@
 const { useState, useEffect } = React
+// const { useParams, useNavigate } = ReactRouterDOM
+const { Link } = ReactRouterDOM
 
 import { bookService } from "../services/book.service.js"
+
 import { BookFilter } from "../cmps/BookFilter.jsx"
 import {BookList} from "../cmps/BookList.jsx"
-import { BookDetails } from "../cmps/BookDetails.jsx"
+// import { AddBook } from "../cmps/AddBook.jsx"
+
+// import { BookDetails } from "../cmps/BookDetails.jsx"
 
 export function BookIndex(){
-    const [ books, setBooks ] = useState(bookService.getAllBooks)
-    const [ filterBy, setFilterBy ] = useState(bookService.getDefaultFilter())
-    const [ selectedBook, setSelectedBook ] = useState(null)
+    const [ books, setBooks ] = useState([])
+    const [ filterBy, setFilterBy ] = useState(bookService.getFilterBy())
+    // const [ selectedBook, setSelectedBook ] = useState(null)
+    // const {bookId} = useParams()
+    // const navigate = useNavigate()
 
     useEffect(() => {
-        bookService.query(filterBy)
-            .then(books => setBooks(books))
+        loadBooks()
     }, [filterBy])
 
-    function onRemoveBook(bookId) {
+    function loadBooks() {
+        bookService.query(filterBy).then(books => setBooks(books));
+    };
+
+    function setFilter(filterBy) {
+        setFilterBy(filterBy)
+    };
+
+    // useEffect(() => {
+    //     bookService.query(filterBy)
+    //         .then(books => setBooks(books))
+    // }, [filterBy])
+
+    function removeBook(bookId) {
         bookService.remove(bookId)
             .then(() => {
                 setBooks(prevBooks => prevBooks.filter(book => book.id !== bookId))
-                // showSuccessMsg(`Book removed`)
             })
             .catch(err => {
                 console.log('err:', err)
-                // showErrorMsg('Cannot remove book ' + bookId)
             })
     }
 
-    
-    function onSetFilterBy(newFilter) {
-        setFilterBy(newFilter)
-    }
-
-    function showBookDetails(book) {
-        setSelectedBook(book)
-    }
    
+
+    // function showBookDetails() {
+    //     setSelectedBook(selectedBook)
+    //     // console.log(book)
+    //     // navigate(`/book/${book.id}`)
+    // }
+
+    if (!books) return <div>Loading...</div>
+  
     return (
         <section>
-            <BookFilter filterBy={filterBy} onFilter={onSetFilterBy}/>
+            <BookFilter filterBy={filterBy} onSetFilter={setFilter}/>
+            <Link to='/book/add'><button>Add Book</button></Link>
             <h2>Books List</h2>
-            {!selectedBook && <BookList books={books} onRemoveBook={onRemoveBook} onShowDetails={showBookDetails}/>}
-            {selectedBook && <BookDetails book={selectedBook} onClose={() => setSelectedBook(null)} />}
+            {books.length && <BookList books={books} onRemoveBook={removeBook}/>}
+            {/* {!selectedBook && <BookList books={books} onRemoveBook={removeBook} onShowDetails={showBookDetails} />} */}
+            {/* {!books.length && <BookDetails book={selectedBook} onClose={() => setSelectedBook(null)} />} */}
         </section>
     )
 }

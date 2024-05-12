@@ -1,6 +1,6 @@
 /* Setup */
 @import "setup/vars.css";
-@import "setup/typography.css";
+/* @import "setup/typography.css"; */
 
 /* Base */
 @import "base/reset.css";
@@ -8,4 +8,5 @@
 @import "base/layout.css";
 
 /* Components */
+@import "cmps/book-list.css";
 @import "cmps/book-details.css";

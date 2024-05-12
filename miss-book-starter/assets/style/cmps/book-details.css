@@ -2,7 +2,15 @@
     box-sizing: border-box;
 }
 
-.sale {
+.book-details .rubric {
+    font-weight: bold;
+}
+
+.book-details .close-btn {
+    margin-block: 1em;
+}
+
+.book-details .sale {
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     color: rgb(218, 74, 34);
     rotate: -10deg;
@@ -10,15 +18,10 @@
     text-align: center;
 }
 
-.sale:hover {
-    scale: 1.5;
-    transition: 0.5s;
-}
-
-.price.red {
+.book-details .price.red {
     color: rgb(199, 59, 59);
 }
 
-.price.green {
+.book-details .price.green {
     color: rgb(43, 118, 20);
 }
